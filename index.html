@@ -43,6 +43,12 @@ body{background:var(--bg-deep);color:var(--text);font-family:"Cormorant Garamond
 .glitch-overlay.snow{display:block;opacity:.2;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cfilter id='s'%3E%3CfeTurbulence baseFrequency='0.85' numOctaves='1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23s)' opacity='.9'/%3E%3C/svg%3E");animation:snowFade .8s ease forwards;}
 .glitch-overlay.neonburn{display:block;background:linear-gradient(180deg,transparent 0%,rgba(79,227,255,.15) 50%,transparent 100%);animation:neonBurn .5s ease forwards;}
 .glitch-overlay.whiteflash{display:block;background:#fff;animation:wFlash .15s steps(1,end) 3 forwards;}
+.glitch-overlay.bloomfinal{display:block;overflow:hidden;background:radial-gradient(ellipse at 50% 60%,rgba(194,182,245,.14),transparent 70%);}
+.glitch-overlay.collapsefinal{display:block;overflow:hidden;background:radial-gradient(ellipse at 50% 30%,rgba(255,74,110,.12),transparent 70%);}
+.bloom-petal{position:absolute;font-size:1.5rem;opacity:0;animation:bloomRise 2.8s ease forwards;}
+@keyframes bloomRise{0%{opacity:0;transform:translateY(50px) scale(.4) rotate(0deg);}25%{opacity:.95;}100%{opacity:0;transform:translateY(-180px) scale(1.35) rotate(60deg);}}
+.ash-petal{position:absolute;font-size:1.4rem;opacity:0;animation:ashFall 2.4s ease forwards;}
+@keyframes ashFall{0%{opacity:0;transform:translateY(-40px) rotate(0deg);}22%{opacity:.9;}100%{opacity:0;transform:translateY(180px) rotate(220deg);}}
 @keyframes scanSweep{0%{background:linear-gradient(to bottom,transparent 0%,rgba(79,227,255,.18) 2%,transparent 4%);background-size:100% 200%;background-position:0 -100%;}100%{background-position:0 200%;}}
 @keyframes chromaAb{0%{box-shadow:inset 5px 0 0 rgba(79,227,255,.4),inset -5px 0 0 rgba(255,255,255,.3);}50%{box-shadow:inset -7px 0 0 rgba(79,227,255,.6),inset 7px 0 0 rgba(255,255,255,.5);}100%{box-shadow:none;}}
 @keyframes screenTear{0%{transform:skewX(0);}25%{transform:skewX(-2.5deg) translateX(4px);}75%{transform:skewX(2.5deg) translateX(-4px);}100%{transform:none;}}
@@ -254,6 +260,10 @@ input[type=range]{width:100%;accent-color:var(--accent);}
 .conv-speech{font-size:1.03rem;line-height:1.7;color:var(--text);}
 .conv-stage{font-style:italic;color:var(--text-dim);font-size:.97rem;line-height:1.65;margin-bottom:20px;padding-left:16px;border-left:2px solid var(--card-edge);}
 .conv-final-note{margin-top:30px;padding:16px;border:1px dashed var(--danger);font-family:"Courier Prime",monospace;font-size:11px;color:var(--danger);letter-spacing:.06em;text-align:center;}
+.conv-interrupt{font-family:"Courier Prime",monospace;font-size:.82rem;letter-spacing:.09em;color:var(--danger);opacity:.9;margin:6px 0 22px;padding:10px 14px;border:1px solid var(--danger);border-radius:4px;background:rgba(255,74,110,.06);animation:interruptShake .3s ease;}
+@keyframes interruptShake{0%{transform:translateX(0);opacity:0;}20%{transform:translateX(-4px);}40%{transform:translateX(4px);}60%{transform:translateX(-2px);opacity:1;}100%{transform:translateX(0);}}
+.conv-silence{text-align:center;font-family:"Courier Prime",monospace;font-size:12px;letter-spacing:.6em;color:var(--text-dim);opacity:.5;margin:28px 0;animation:silencePulse 2.4s ease-in-out infinite;}
+@keyframes silencePulse{0%,100%{opacity:.22;}50%{opacity:.6;}}
 .inscription-box{margin:18px 0;padding:18px;background:var(--bg);border:1px solid var(--card-edge);}
 .inscription-line{font-size:1rem;line-height:2.2;color:var(--text);}
 .inscription-blank{display:inline-block;border-bottom:2px solid var(--accent);min-width:80px;text-align:center;margin:0 6px;font-family:"Courier Prime",monospace;font-size:.9rem;color:var(--accent-bright);}
@@ -2720,9 +2730,11 @@ const NUCLEO_SCRIPT=[
   {type:"line",speaker:"Elliot",text:"Arthur."},
   {type:"stage",text:"O nome sai baixo, quase um gesto e não uma palavra, a mesma forma que ele tomava no porão do Holiday Espresso, tarde da noite, quando nenhum dos dois tinha coragem de dizer mais nada depois dele. Só que agora há uma espada na mão de Elliot, e o peso dela muda o que a palavra significa. E a voz do outro lado já não soa distorcida. Soa exatamente, perturbadoramente, como Arthur."},
   {type:"stage",text:"Elliot não sabe mais dizer, com certeza, onde termina Arthur e onde começa Twisted Passion imitando ele. Talvez nunca tenha havido uma linha nitida entre os dois."},
+  {type:"interrupt",text:"—nós contamos— não, eu conto, eu— nós contamos as xíc— eu conto—"},
   {type:"line",speaker:"Arthur",text:"Eu fiquei pensando em como você ia estar quando finalmente chegasse aqui. Se ia vir com raiva. Se ia vir com medo. Ou se, no fim, tinha simplesmente me esquecido, do jeito que a gente esquece um número de telefone que não usa mais."},
   {type:"line",speaker:"Elliot",text:"Eu tentei esquecer."},
   {type:"line",speaker:"Arthur",text:"Eu sei. Você sempre tentou esquecer as coisas que mais doiam primeiro. Vejo que isso não mudou."},
+  {type:"silence",text:"· · ·"},
   {type:"stage",text:"A névoa ao redor dele se agita, e por um segundo ela não parece mais névoa, parece fumaca de um café que nunca esfriou, quente demais pra ser só memória. Há algo genuinamente de Arthur ali dentro. Há também, por baixo, algo que só aprendeu a soar como ele. Elliot já não consegue mais separar os dois com certeza, e essa incerteza pesa mais do que qualquer espinho."},
   {type:"choice",prompt:"O que Elliot responde?",options:[
     {label:"Admitir: não esqueceu porque doía menos, esqueceu pra continuar respirando sem ele.",attr:"compaixao",resultText:"Eu sei, Arthur. Não esqueci porque doía pouco. Esqueci porque era o único jeito que eu tinha de continuar respirando sem você por perto.",
@@ -2744,7 +2756,12 @@ const NUCLEO_SCRIPT=[
        {type:"stage",text:"A névoa ao redor de Arthur treme com a resposta, como se a raiva de Elliot tivesse tocado em alguma coisa que ela preferia manter escondida."}
      ]}
   ]},
-  {type:"line",speaker:"Arthur",text:"Eu fico pensando, esse tempo todo aqui dentro, em como cheguei nesse ponto. Ela sabia exatamente o que dizer, Elliot. Primeiro me fez acreditar que eu estava escolhendo cada coisa que eu fazia."},
+  {type:"skirmish",title:"A névoa não gosta do que acabou de ouvir",need:5,time:13,narrative:"A verdade dita em voz alta faz a névoa se contrair antes de atacar. Espinhos se soltam da estátua e voam na direção de Elliot enquanto Arthur ainda está com os olhos fechados, tentando decidir o que responder. A Blade of Thorns precisa cortar caminho antes que ele consiga terminar a frase."},
+  {type:"variant",variants:{
+    compaixao:"Eu fico pensando, esse tempo todo aqui dentro, em como cheguei nesse ponto. Você sempre teve esse jeito de olhar pra mim que eu nunca soube retribuir direito. Ela sabia disso. Sabia exatamente o que dizer, Elliot. Primeiro me fez acreditar que eu estava escolhendo cada coisa que eu fazia.",
+    aceitacao:"Eu fico pensando, esse tempo todo aqui dentro, em como cheguei nesse ponto. Você sempre foi bom em chamar as coisas pelo nome certo. Eu nunca fui. Ela sabia disso, sabia exatamente o que dizer, Elliot. Primeiro me fez acreditar que eu estava escolhendo cada coisa que eu fazia.",
+    desespero:"Eu fico pensando, esse tempo todo aqui dentro, em como cheguei nesse ponto. Você ainda fala comigo como se eu devesse satisfação, do mesmo jeito de sempre. Ela sabia usar isso também, Elliot. Primeiro me fez acreditar que eu estava escolhendo cada coisa que eu fazia."
+  }},
   {type:"line",speaker:"Arthur",text:"Depois, devagar, sem eu perceber quando começou, fez parecer que tudo que dava errado era culpa minha. Só minha. Sempre minha."},
   {type:"line",speaker:"Elliot",text:"A névoa fez isso com você?"},
   {type:"line",speaker:"Arthur",text:"A névoa só sabe imitar. Quem ensinou ela a falar assim foi meu pai. Ele fazia a mesma coisa, só que sem precisar de nenhuma névoa pra isso."},
@@ -2758,6 +2775,7 @@ const NUCLEO_SCRIPT=[
   {type:"line",speaker:"Arthur",text:"...Essa é a parte que eu nunca consegui admitir."},
   {type:"stage",text:"E é como se admitir doesse fisicamente: os ombros de Arthur se curvam, e a névoa, sentindo a rachadura, se aperta mais forte ao redor dele, como se pudesse fechar a ferida por fora só cobrindo ela de roxo."},
   {type:"line",speaker:"Arthur",text:"Fica comigo. Dessa vez eu fecho a porta antes que alguém mais saia machucado. Ninguém mais sai, ninguém mais volta tarde demais. Só nós dois, do jeito que devia ter sido desde o primeiro sino torto."},
+  {type:"interrupt",text:"—ninguém mais sai, ninguém mais SAI, ningu— fica, fica, FICA—"},
   {type:"stage",text:"E e nesse instante que Elliot entende, com um frio que não vem da névoa: nunca houve uma escolha real sendo oferecida, nem antes, nem agora. Só um espelho pedindo pra ser a única sala da casa. A névoa nunca parou de girar, só fingiu, o tempo suficiente pra parecer calma. Agora ela se adensa de novo, mais depressa, espinhos vivos brotando dos ombros de Arthur como se sempre tivessem sido parte do corpo dele, nunca uma doenca por cima."},
   {type:"line",speaker:"Arthur",text:"Você não vai embora de novo. Eu construi cada tijolo dessa cidade pra garantir isso, e uma parte de mim sabe que isso é exatamente o que meu pai teria feito."},
   {type:"choice",prompt:"O que Elliot responde?",options:[
@@ -2781,7 +2799,13 @@ const NUCLEO_SCRIPT=[
      ]}
   ]},
   {type:"stage",text:"Não há resposta que ainda faca sentido, só o avanco, os espinhos cortando o ar como se o ar tivesse feito algo errado. A Blade of Thorns se ergue quase sozinha, guiada por um instinto que já não e só defesa. E ali, no meio do movimento, Elliot ve: a lâmina inteira e feita do mesmo roxo da névoa. A espada que vai libertar Arthur foi forjada com o próprio material da sua prisao."},
-  {type:"line",speaker:"Arthur",text:"...eu sei o que eu virei. Eu sei há anos, Elliot, só nunca tive coragem de dizer em voz alta pra não virar verdade. Termina isso. Antes que eu esqueça teu nome de vez, e essa e a única parte de mim que eu ainda queria salvar."},
+  {type:"skirmish",title:"Última investida antes da confissão",need:6,time:14,narrative:"É como se a névoa sentisse que Arthur está prestes a dizer algo que ela não controla mais. Os espinhos avançam com mais força do que em qualquer momento anterior, tentando cobrir a voz dele antes que a frase termine. Elliot precisa abrir espaço com a Blade of Thorns só para conseguir ouvir o resto."},
+  {type:"variant",variants:{
+    compaixao:"...eu sei o que eu virei. Eu sei há anos, Elliot, só nunca tive coragem de dizer em voz alta pra não virar verdade. E você continua aqui, olhando pra mim do mesmo jeito de sempre, mesmo sabendo. Termina isso. É a única parte de mim que eu ainda queria salvar.",
+    aceitacao:"...eu sei o que eu virei. Eu sei há anos, Elliot, só nunca tive coragem de dizer em voz alta pra não virar verdade. Você não veio pra me salvar, veio pra ver com clareza. Talvez seja o suficiente. Termina isso, antes que eu esqueça teu nome de vez, e essa é a única parte de mim que eu ainda queria salvar.",
+    desespero:"...eu sei o que eu virei. Eu sei há anos, Elliot, só nunca tive coragem de dizer em voz alta pra não virar verdade. Grita comigo se precisar, eu aguento isso também. Termina isso. Antes que eu esqueça teu nome de vez, e essa é a única parte de mim que eu ainda queria salvar."
+  }},
+  {type:"silence",text:"· · ·"},
   {type:"stage",text:"Por um segundo, só um, os olhos dele voltam a ser os olhos do balcao de madeira escura, o cheiro de café recém-moído, o inicio de tudo antes de tudo precisar de um nome de bairro pra doer. E entao a névoa fecha ao redor dele outra vez, como uma mão se fechando devagar, e o segundo passa como água entre os dedos."},
   {type:"choice",prompt:"O golpe final. O que guia a mão de Elliot?",options:[
     {label:"Golpear enquanto o encara de verdade, sem desviar o olhar.",attr:"compaixao",resultText:"Eu vim pra te ver de verdade, Arthur. Não a versão que essa cidade inventou pra não precisar te perder direito de vez. Me desculpa, esse foi o único jeito que sobrou de te devolver pra você mesmo.",
@@ -2953,21 +2977,42 @@ function renderNucleoReveal(){
   nuStepIndex=0;nuAttr={compaixao:0,aceitacao:0,desespero:0};nuBranchQueue=[];
   renderNucleoStep();
 }
+function nucleoLeadingAttr(){
+  const{compaixao:c,aceitacao:a,desespero:d}=nuAttr;
+  if(d>c&&d>=a)return"desespero";
+  if(a>c&&a>=d)return"aceitacao";
+  return"compaixao";
+}
+function nucleoStepHtml(step){
+  if(step.type==="stage")return`<div class="conv-stage">${step.text}</div>`;
+  if(step.type==="line")return`<div class="conv-line"><p class="conv-speaker">${step.speaker}</p><p class="conv-speech">${step.text}</p></div>`;
+  if(step.type==="interrupt")return`<div class="conv-interrupt">${step.text}</div>`;
+  if(step.type==="silence")return`<div class="conv-silence">${step.text||"· · ·"}</div>`;
+  if(step.type==="variant")return`<div class="conv-line"><p class="conv-speaker">Arthur</p><p class="conv-speech">${step.variants[nucleoLeadingAttr()]}</p></div>`;
+  return"";
+}
+function showNucleoStep(el,step,onNext){
+  const bodyHtml=nucleoStepHtml(step);
+  el.innerHTML=`<button class="btn secondary" id="nuBackTop" style="margin-bottom:18px;padding:6px 14px;font-size:.72rem;">voltar ao bairro</button>
+    <p class="room-tag">Núcleo de Twisted Passion, Fase 4: Escolha</p>
+    <h1 class="room-title">A névoa se abre</h1>
+    <div class="conv-setting">O que restava de Arthur, tomado pela corrupção</div>
+    <div id="nuStepBody">${bodyHtml}</div>
+    <div style="text-align:center;margin-top:26px;"><button class="btn" id="nuNext"${step.type==="silence"?" disabled":""}>continuar</button></div>`;
+  nucleoBack();
+  if(step.type==="interrupt"){triggerGlitch("chroma");sfxMiss();}
+  const nb=document.getElementById("nuNext");
+  if(step.type==="silence"){
+    nb.style.opacity=".4";
+    setTimeout(()=>{nb.disabled=false;nb.style.opacity="1";},1500);
+  }
+  nb.addEventListener("click",onNext);
+}
 function renderNucleoStep(){
   const el=document.getElementById("nucleoContent");
   if(nuBranchQueue.length>0){
     const b=nuBranchQueue.shift();
-    const bodyHtml=b.type==="stage"
-      ?`<div class="conv-stage">${b.text}</div>`
-      :`<div class="conv-line"><p class="conv-speaker">${b.speaker}</p><p class="conv-speech">${b.text}</p></div>`;
-    el.innerHTML=`<button class="btn secondary" id="nuBackTop" style="margin-bottom:18px;padding:6px 14px;font-size:.72rem;">voltar ao bairro</button>
-      <p class="room-tag">Núcleo de Twisted Passion, Fase 4: Escolha</p>
-      <h1 class="room-title">A névoa se abre</h1>
-      <div class="conv-setting">O que restava de Arthur, tomado pela corrupção</div>
-      <div id="nuStepBody">${bodyHtml}</div>
-      <div style="text-align:center;margin-top:26px;"><button class="btn" id="nuNext">continuar</button></div>`;
-    nucleoBack();
-    document.getElementById("nuNext").addEventListener("click",renderNucleoStep);
+    showNucleoStep(el,b,renderNucleoStep);
     return;
   }
   if(nuStepIndex>=NUCLEO_SCRIPT.length){
@@ -2975,37 +3020,73 @@ function renderNucleoStep(){
     return;
   }
   const step=NUCLEO_SCRIPT[nuStepIndex];
-  const bodyHtml=step.type==="stage"
-    ?`<div class="conv-stage">${step.text}</div>`
-    :step.type==="line"
-    ?`<div class="conv-line"><p class="conv-speaker">${step.speaker}</p><p class="conv-speech">${step.text}</p></div>`
-    :`<p class="choice-prompt">${step.prompt}</p><div class="choice-list">${step.options.map((o,i)=>`<button class="choice-btn" data-i="${i}">${o.label}</button>`).join("")}</div>`;
-  el.innerHTML=`<button class="btn secondary" id="nuBackTop" style="margin-bottom:18px;padding:6px 14px;font-size:.72rem;">voltar ao bairro</button>
-    <p class="room-tag">Núcleo de Twisted Passion, Fase 4: Escolha</p>
-    <h1 class="room-title">A névoa se abre</h1>
-    <div class="conv-setting">O que restava de Arthur, tomado pela corrupção</div>
-    <div id="nuStepBody">${bodyHtml}</div>
-    ${step.type!=="choice"?`<div style="text-align:center;margin-top:26px;"><button class="btn" id="nuNext">continuar</button></div>`:""}`;
-  nucleoBack();
+  if(step.type==="skirmish"){renderNucleoSkirmish(step);return;}
   if(step.type==="choice"){
+    const bodyHtml=`<p class="choice-prompt">${step.prompt}</p><div class="choice-list">${step.options.map((o,i)=>`<button class="choice-btn" data-i="${i}">${o.label}</button>`).join("")}</div>`;
+    el.innerHTML=`<button class="btn secondary" id="nuBackTop" style="margin-bottom:18px;padding:6px 14px;font-size:.72rem;">voltar ao bairro</button>
+      <p class="room-tag">Núcleo de Twisted Passion, Fase 4: Escolha</p>
+      <h1 class="room-title">A névoa se abre</h1>
+      <div class="conv-setting">O que restava de Arthur, tomado pela corrupção</div>
+      <div id="nuStepBody">${bodyHtml}</div>`;
+    nucleoBack();
     document.querySelectorAll(".choice-btn").forEach(btn=>{
       btn.addEventListener("click",()=>{
         const opt=step.options[Number(btn.dataset.i)];
         nuAttr[opt.attr]=(nuAttr[opt.attr]||0)+1;
         if(opt.branch&&opt.branch.length)nuBranchQueue=[...opt.branch];
         document.getElementById("nuStepBody").innerHTML=`<div class="conv-line"><p class="conv-speaker">Elliot</p><p class="conv-speech">${opt.resultText}</p></div>`;
-        el.querySelector('[style*="margin-top:26px"]')?.remove();
         const cont=document.createElement("div");cont.style.cssText="text-align:center;margin-top:26px;";
         cont.innerHTML=`<button class="btn" id="nuNext">continuar</button>`;
         el.appendChild(cont);
         document.getElementById("nuNext").addEventListener("click",()=>{nuStepIndex++;renderNucleoStep();});
       });
     });
-  } else {
-    document.getElementById("nuNext").addEventListener("click",()=>{nuStepIndex++;renderNucleoStep();});
+    return;
   }
+  showNucleoStep(el,step,()=>{nuStepIndex++;renderNucleoStep();});
 }
 let nuStepIndex=0,nuAttr={compaixao:0,aceitacao:0,desespero:0},nuBranchQueue=[];
+/* Fase 4-B: escaramuças físicas com a Blade of Thorns, intercaladas na conversa */
+function renderNucleoSkirmish(step){
+  const el=document.getElementById("nucleoContent");
+  const NEED=step.need||5,TIME=step.time||13;
+  el.innerHTML=`<button class="btn secondary" id="nuBackTop" style="margin-bottom:18px;padding:6px 14px;font-size:.72rem;">voltar ao bairro</button>
+    <p class="room-tag">Núcleo de Twisted Passion, Fase 4: Escolha</p>
+    <h1 class="room-title">🗡️ ${step.title}</h1>
+    <div class="room-narrative"><p>${step.narrative}</p></div>
+    <div class="nucleo-hud"><span id="nuCount">golpes: 0 / ${NEED}</span><span id="nuTimer">tempo: ${TIME}s</span></div>
+    <div class="nucleo-arena" id="nuArena"></div>
+    <p class="feedback" id="nuFb">A Blade of Thorns também precisa responder, não só as palavras.</p>`;
+  nucleoBack();
+  const arena=document.getElementById("nuArena");
+  let hits=0,timeLeft=TIME,ended=false,spawnIv,timeIv;
+  function spawn(){
+    if(ended)return;
+    const b=document.createElement("div");b.className="nucleo-target";b.textContent="🥀";
+    b.style.left=Math.random()*(arena.clientWidth-32)+"px";b.style.top=Math.random()*(arena.clientHeight-32)+"px";
+    const lt=setTimeout(()=>{if(b.parentNode){b.remove();sfxMiss();}},1500);
+    b.addEventListener("click",()=>{
+      clearTimeout(lt);b.remove();hits++;sfxHit();triggerGlitch("chroma");
+      const c=document.getElementById("nuCount");if(c)c.textContent="golpes: "+hits+" / "+NEED;
+      if(hits>=NEED&&!ended){
+        ended=true;clearInterval(spawnIv);clearInterval(timeIv);
+        sfxClash();setTimeout(()=>{nuStepIndex++;renderNucleoStep();},700);
+      }
+    });
+    arena.appendChild(b);
+  }
+  spawnIv=setInterval(spawn,750);
+  timeIv=setInterval(()=>{
+    timeLeft--;
+    const t=document.getElementById("nuTimer");if(t)t.textContent="tempo: "+Math.max(0,timeLeft)+"s";
+    if(timeLeft<=0&&!ended){
+      ended=true;clearInterval(spawnIv);clearInterval(timeIv);arena.innerHTML="";
+      const fb=document.getElementById("nuFb");
+      if(fb){fb.innerHTML='A névoa aperta o cerco por um instante, mas Elliot ainda está de pé. <button class="btn secondary" id="nuRetry" style="margin-top:8px;padding:6px 14px;">tentar de novo</button>';fb.className="feedback bad";}
+      const rb=document.getElementById("nuRetry");if(rb)rb.addEventListener("click",()=>renderNucleoSkirmish(step));
+    }
+  },1000);
+}
 
 /* ===== FASE 5: CONFRONTO (golpe final) ===== */
 function renderNucleoPhase5(){
@@ -3042,12 +3123,12 @@ function renderNucleoGoodEnding(){
   const el=document.getElementById("nucleoContent");
   droneStop();
   const first=!S.finalBossDone;
-  if(first){S.finalBossDone=true;S.pureGoodEndingDone=true;S.bankUnlocked=true;S.endingType="good";S.trainUnlocked=true;save();triggerGlitch("neonburn");updateStatus();sfxSeal();unlockAchievement("aceitacao_end");unlockAchievement("fragmento_12");}
+  if(first){S.finalBossDone=true;S.pureGoodEndingDone=true;S.bankUnlocked=true;S.endingType="good";S.trainUnlocked=true;save();triggerGlitch("neonburn");setTimeout(()=>triggerFinalVisual("bloom"),450);updateStatus();sfxSeal();unlockAchievement("aceitacao_end");unlockAchievement("fragmento_12");}
   el.innerHTML=`<p class="room-tag">Nucleo de Twisted Passion</p>
     <h1 class="room-title">🗡️ O que restou</h1>
     <div class="conv-stage">Não há grito, só um suspiro longo, quase um alivio, como se aquela parte de Arthur tivesse esperado exatamente por isso havia vinte e cinco anos. A névoa que o formava se desfaz de uma vez, num vento que não vem de lugar nenhum, levando junto o último cheiro de café queimado que Rosabelle ainda guardava no ar.</div>
     <div class="conv-stage">A Blade of Thorns escorrega da mão de Elliot e se crava sozinha na rocha central. A estatua rachada, a praça, a própria palavra "Twisted Passion" escrita no arco de entrada, tudo começa a afundar devagar na montanha, como se a terra estivesse, finalmente, engolindo a própria ferida.</div>
-    <div class="conv-stage">Em segundos, o bairro inteiro desaparece. A névoa roxa que cobria Rosabelle recua de todos os cantos da cidade ao mesmo tempo, como uma respiracao presa sendo solta.</div>
+    <div class="conv-stage">Em segundos, o bairro inteiro desaparece. A névoa roxa que cobria Rosabelle recua de todos os cantos da cidade ao mesmo tempo, como uma respiracao presa sendo solta. E então, bairro por bairro, algo que ninguém nessa cidade viu em vinte e cinco anos: rosas nascendo nas rachaduras do asfalto, nas calhas enferrujadas, nas vitrines cegas do Holiday Espresso, como se Rosabelle inteira tivesse decidido, ao mesmo tempo, florescer de novo.</div>
     <div class="conv-final-note">Twisted Passion não existe mais no mapa de Rosabelle. Só restou um objeto, largado exatamente onde Arthur esteve pela última vez.</div>
     <div class="conv-stage">Elliot atravessa a praça de volta, passando pelas mesmas ruas que juram ter mudado. Mas quando ele chega no que deveria ser a saida (a estrada, o limite do bairro, qualquer linha que separasse Rosabelle do resto do mundo), encontra só mais Rosabelle. As mesmas vitrines. O mesmo relogio parado. Como se a cidade tivesse decidido, sem avisar ninguém, que ele não vai embora de jeito nenhum.</div>
     <div class="conv-stage">Ele finge aceitar. Sorri pros vizinhos, ajuda a reabrir a Cafeteria Hortencia, aprende os nomes de todo mundo de novo, como quem monta um cenário pra uma peca que já sabe que não termina. Por fora, parece descanso. Por dentro, e só mais um jeito de continuar preso sem precisar admitir isso em voz alta.</div>
@@ -3066,7 +3147,7 @@ function renderNucleoLovelyEnding(){
   const el=document.getElementById("nucleoContent");
   droneStop();
   const first=!S.lovelyEndingDone;
-  if(first){S.lovelyEndingDone=true;S.finalBossDone=true;S.bankUnlocked=true;S.endingType="lovely";S.trainUnlocked=true;save();triggerGlitch("neonburn");updateStatus();sfxChime();unlockAchievement("lovely_ending");unlockAchievement("fragmento_01");if(S.memoriesWereComplete)unlockAchievement("eu_me_lembro");}
+  if(first){S.lovelyEndingDone=true;S.finalBossDone=true;S.bankUnlocked=true;S.endingType="lovely";S.trainUnlocked=true;save();triggerGlitch("neonburn");setTimeout(()=>triggerFinalVisual("bloom"),450);updateStatus();sfxChime();unlockAchievement("lovely_ending");unlockAchievement("fragmento_01");if(S.memoriesWereComplete)unlockAchievement("eu_me_lembro");}
   const memLines=FRAGS.filter(f=>f.id!=="f8").map(f=>`<p>${f.label}</p>`).join("");
   el.innerHTML=`<p class="room-tag">Nucleo de Twisted Passion</p>
     <h1 class="room-title">☕ Elliot lembra</h1>
@@ -3084,7 +3165,7 @@ function renderNucleoLovelyEnding(){
     <div class="conv-stage">Arthur não responde. Não porque falte o que dizer, mas porque, talvez pela primeira vez, alguém disse em voz alta a coisa que ele passou a vida inteira fingindo que não doia.</div>
     <div class="conv-line"><p class="conv-speaker">Elliot</p><p class="conv-speech">Eu não vou fingir que sei consertar isso. Mas eu vejo você, Arthur. Não o herdeiro reserva, não o vilão que essa cidade precisava pra ter um nome. Você. E você merece ser salvo, não porque alguém precisa de você inteiro pra continuar de pé, mas porque merece, ponto final.</p></div>
     <div class="conv-stage">Não e uma frase de amor do jeito que Twisted Passion sempre entendeu amor: posse, medo de perder, uma porta trancada por dentro. E o oposto exato disso. E alguém decidindo enxergar o outro inteiro, sem pedir nada em troca, sem precisar transformar isso em outra coisa pra que valha a pena.</div>
-    <div class="conv-stage">A névoa não explode nem recua. Ela simplesmente perde força, do jeito que qualquer coisa nascida do esquecimento perde força quando alguém, finalmente, lembra.</div>
+    <div class="conv-stage">A névoa não explode nem recua. Ela simplesmente perde força, do jeito que qualquer coisa nascida do esquecimento perde força quando alguém, finalmente, lembra. E onde ela recua, Rosabelle inteira floresce ao mesmo tempo: rosas subindo pelas paredes da praça, pela estatua rachada, pelas ruas que Elliot atravessou a cidade inteira pra chegar até aqui, como se cada lembrança recuperada tivesse virado raiz.</div>
     <div class="conv-final-note" style="border-color:var(--accent-bright);color:var(--accent-bright);">Twisted Passion se desfaz por inteiro, e Arthur, finalmente livre dele, continua ali, respirando, real, inteiro, olhando pra Elliot como se estivesse vendo o dia em que se conheceram outra vez.</div>
     <div style="text-align:center;margin-top:26px;"><button class="btn secondary" id="nuBackFinal">${S.creditsShown?"voltar ao mapa":"está pronto?"}</button></div>`;
   document.getElementById("nuBackFinal").addEventListener("click",()=>{
@@ -3095,11 +3176,11 @@ function renderNucleoBadEnding(){
   const el=document.getElementById("nucleoContent");
   droneStop();
   const first=!S.badEndingDone;
-  if(first){S.badEndingDone=true;S.endingType="bad";save();triggerGlitch("chroma");sfxClash();unlockAchievement("final_ruim");unlockAchievement("fragmento_25");}
+  if(first){S.badEndingDone=true;S.endingType="bad";save();triggerGlitch("chroma");setTimeout(()=>triggerFinalVisual("collapse"),450);sfxClash();unlockAchievement("final_ruim");unlockAchievement("fragmento_25");}
   el.innerHTML=`<p class="room-tag">Nucleo de Twisted Passion</p>
     <h1 class="room-title" style="color:var(--danger);">🥀 O golpe que não chegou a tempo</h1>
     <div class="conv-stage">O golpe acerta, mas acerta errado, de raiva, de pressa, de qualquer jeito menos do jeito certo. Arthur não se desfaz. Ele se abre, como uma ferida que sempre esteve esperando ser cutucada fundo demais.</div>
-    <div class="conv-stage">A névoa que saia dele não recua. Ela explode pra fora, de uma vez, engolindo a praça, o arco de entrada, a Blade of Thorns caída no chao, e depois, sem pressa nenhuma, o resto de Rosabelle inteira. Bairro por bairro, luz por luz.</div>
+    <div class="conv-stage">A névoa que saia dele não recua. Ela explode pra fora, de uma vez, engolindo a praça, o arco de entrada, a Blade of Thorns caída no chao, e depois, sem pressa nenhuma, o resto de Rosabelle inteira. Bairro por bairro, luz por luz. As rosas que ainda restavam na cidade desabam em pétalas roxas, como cinza que cai devagar demais pra parecer real, cobrindo cada rua que Elliot atravessou pra chegar até aqui.</div>
     <div class="conv-stage">Elliot corre, mas correr num lugar que e feito de névoa não leva a lugar nenhum. Ninguém o persegue. Ninguém precisa. A cidade inteira já sabe onde ele vai passar.</div>
     <div class="conv-line"><p class="conv-speaker">Derik Loveshot</p><p class="conv-speech">Você prometeu.</p></div>
     <div class="conv-line"><p class="conv-speaker">Marina</p><p class="conv-speech">A gente acreditou em você.</p></div>
@@ -3417,6 +3498,24 @@ function triggerGlitch(type){
   if(!type)type=GLITCH_TYPES[Math.floor(Math.random()*GLITCH_TYPES.length)];
   glitchOverlay.className="glitch-overlay "+type;
   setTimeout(()=>{glitchOverlay.className="glitch-overlay";},900);
+}
+/* ===== VISUAL FINAL (Rosabelle inteira reagindo ao golpe) ===== */
+function triggerFinalVisual(type){
+  const isBloom=type==="bloom";
+  glitchOverlay.className="glitch-overlay "+(isBloom?"bloomfinal":"collapsefinal");
+  glitchOverlay.innerHTML="";
+  const emoji=isBloom?["🌹","🌸","✨"]:["🥀","💜","🩸"];
+  const count=isBloom?28:24;
+  for(let i=0;i<count;i++){
+    const p=document.createElement("span");
+    p.className=isBloom?"bloom-petal":"ash-petal";
+    p.textContent=emoji[Math.floor(Math.random()*emoji.length)];
+    p.style.left=Math.random()*100+"%";
+    p.style.top=isBloom?(55+Math.random()*35)+"%":(Math.random()*22)+"%";
+    p.style.animationDelay=(Math.random()*1.3)+"s";
+    glitchOverlay.appendChild(p);
+  }
+  setTimeout(()=>{glitchOverlay.className="glitch-overlay";glitchOverlay.innerHTML="";},3400);
 }
 /* ===== WINDOWS ALERT (ARG) ===== */
 const WIN_ALERT_MESSAGES=[
